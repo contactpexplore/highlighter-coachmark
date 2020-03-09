@@ -90,6 +90,7 @@ class CoachMark {
     BoxShape markShape = BoxShape.circle,
     Duration duration,
     VoidCallback onClose,
+    Function onPointer
   }) async {
     // Prevent from showing multiple marks at the same time
     if (_isVisible) {
@@ -111,6 +112,7 @@ class CoachMark {
                 markShape: markShape,
                 doClose: close,
                 children: children,
+                onPointer: onPointer,
               ),
         );
 
@@ -145,6 +147,7 @@ class _HighlighterCoachMarkWidget extends StatefulWidget {
     @required this.markShape,
     @required this.children,
     @required this.doClose,
+    @required this.onPointer,
     @required this.bgColor,
   }) : super(key: key);
 
@@ -153,7 +156,7 @@ class _HighlighterCoachMarkWidget extends StatefulWidget {
   final List<Widget> children;
   final VoidCallback doClose;
   final Color bgColor;
-
+  final Function onPointer;
   @override
   _HighlighterCoachMarkState createState() => new _HighlighterCoachMarkState();
 }
@@ -228,7 +231,7 @@ class _HighlighterCoachMarkState extends State<_HighlighterCoachMarkWidget>
               ),
               _CoachMarkLayer(
                 behavior: HitTestBehavior.translucent,
-                onPointerDown: _onPointer,
+                onPointerDown: _onPointerDown,
                 onPointerMove: _onPointer,
                 onPointerUp: _onPointer,
                 onPointerCancel: _onPointer,
@@ -259,7 +262,11 @@ class _HighlighterCoachMarkState extends State<_HighlighterCoachMarkWidget>
   }
 
   void _onPointer(PointerEvent p) {
-    widget.doClose();
+   
+    //widget.doClose();
+  }
+  void _onPointerDown(PointerEvent p){
+     widget.onPointer(p);
   }
 }
 
